@@ -19,19 +19,17 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
-            statusBarIconBrightness: Brightness.dark
-          ),
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          )
-        ),
+            backgroundColor: Colors.white,
+            elevation: 0.0,
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: Colors.white,
+              statusBarIconBrightness: Brightness.dark,
+            ),
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            )),
       ),
       home: const OnBoardingScreen(),
     );
   }
 }
-

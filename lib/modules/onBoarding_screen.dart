@@ -6,32 +6,16 @@ import 'package:task1/modules/register_screen.dart';
 
 import 'login_screen.dart';
 
-class onBoardingItemModel {
+class OnBoardingItemModel {
   final String image;
   final String title;
   final String body;
-  onBoardingItemModel({
+  OnBoardingItemModel({
     required this.image,
     required this.title,
     required this.body,
   });
 }
-
-List item = [
-  onBoardingItemModel(
-    image: 'assets/images/delivery.png',
-    title: 'Get food delivery to your \n         doorstep asap',
-    body:
-        'We have young and professional delivery team that will bring your food as soon as\n               possible to your doorstep',
-  ),
-  onBoardingItemModel(
-    image: 'assets/images/done.png',
-    title: 'Buy Any Food from your\n     favorite restaurant',
-    body:
-        'We are constantly adding your favourite\n restaurant throughout the territory and\n       around your area carefully selected',
-  ),
-  onBoardingItemModel(image: 'assets/images/payment.png', title: 'Easy Payment', body: 'We make food ordering fast, simple and free - no matter if you order online or cash.'),
-];
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -41,9 +25,30 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
+  var control = PageController();
+  bool isLast = false;
+  List item = [
+    OnBoardingItemModel(
+      image: 'assets/images/delivery.png',
+      title: 'Get food delivery to your \n         doorstep asap',
+      body:
+          'We have young and professional delivery team that will bring your food as soon as\n               possible to your doorstep',
+    ),
+    OnBoardingItemModel(
+      image: 'assets/images/done.png',
+      title: 'Buy Any Food from your\n     favorite restaurant',
+      body:
+          'We are constantly adding your favourite\n restaurant throughout the territory and\n       around your area carefully selected',
+    ),
+    OnBoardingItemModel(
+        image: 'assets/images/payment.png',
+        title: 'Easy Payment',
+        body:
+            'We make food ordering fast, simple and free - no matter if you order online or cash.'),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    var control = PageController();
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -62,7 +67,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       MaterialPageRoute(
                         builder: (context) => const LoginScreen(),
                       ),
-                          (route) => false);
+                      (route) => false);
                 },
               ),
             ),
@@ -94,6 +99,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               controller: control,
               itemBuilder: (context, index) => buildPageViewItem(item[index]),
               itemCount: item.length,
+              onPageChanged: (int index) {
+                if (index == item.length - 1) {
+                  setState(() {
+                    isLast = true;
+                  });
+                } else {
+                  setState(() {
+                    isLast = false;
+                  });
+                }
+              },
             ),
           ),
           const SizedBox(
@@ -115,14 +131,21 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: MyButton(
-              text: 'Get Started',
+              text: isLast ? 'Get Started' : 'Next',
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ),
-                        (route) => false);
+                if (isLast) {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                      (route) => false);
+                } else {
+                  control.nextPage(
+                    duration: const Duration(milliseconds: 750),
+                    curve: Curves.fastLinearToSlowEaseIn,
+                  );
+                }
               },
             ),
           ),
@@ -144,7 +167,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       MaterialPageRoute(
                         builder: (context) => const RegisterScreen(),
                       ),
-                          (route) => false);
+                      (route) => false);
                 },
               ),
             ],
@@ -154,7 +177,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  Widget buildPageViewItem(onBoardingItemModel model) {
+  Widget buildPageViewItem(OnBoardingItemModel model) {
     return Column(
       children: [
         Expanded(
@@ -168,7 +191,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           model.title,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Padding(
